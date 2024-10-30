@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-untrusted
+spec:
+  selector:
+    app: nginx-untrusted
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-untrusted-deployment
+  labels:
+    app: nginx-untrusted
+spec:
+  selector:
+    matchLabels:
+      app: nginx-untrusted
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx-untrusted
+    spec:
+      containers:
+      - name: nginx-untrusted
+        image: nginx
+        ports:
+        - containerPort: 80
